@@ -1,0 +1,12 @@
+
+\.idea/
+
+cams/__pycache__/
+
+cams/\.DS_Store
+
+\.DS_Store
+
+*.pyc
+
+db\.sqlite3

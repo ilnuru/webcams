@@ -1,0 +1,59 @@
+{% extends 'cams/base.html' %}
+{% load custom_tags %}
+
+{% block content %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">{{ house.name }},
+            <small>{{ cams.count }} камер</small>
+        </h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+
+            <div class="btn-group mr-2 mb-2" role="group">
+                <a class="btn btn-sm btn-outline-secondary {% if request.GET.type == 'all' or request.GET.type == Non %}active{% endif %}"
+                   href="?{% url_replace type='all' %}">
+                    Все
+                </a>
+                <a class="btn btn-sm btn-outline-secondary {% if request.GET.type == 'in' %}active{% endif %}"
+                   href="?{% url_replace type='in' %}">
+                    <span data-feather="home"></span> Внутренние
+                </a>
+                <a class="btn btn-sm btn-outline-secondary {% if request.GET.type == 'out' %}active{% endif %}"
+                   href="?{% url_replace type='out' %}">
+                    <span data-feather="wind"></span> Внешние
+                </a>
+            </div>
+            <div class="btn-group mb-2" role="group">
+                <a class="btn btn-sm btn-outline-secondary {% if request.GET.order == 'ask' or request.GET.order == None %}active{% endif %}"
+                   href="?{% url_replace order='ask' %}">
+                    <span data-feather="chevron-up"></span> По возрастанию
+                </a>
+                <a class="btn btn-sm btn-outline-secondary {% if request.GET.order == 'desk' %}active{% endif %}"
+                   href="?{% url_replace order='desk' %}">
+                    <span data-feather="chevron-down"></span> По убыванию
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {% if cams %}
+            {% for cam in cams %}
+                <div class="col-xs-12 col-sm-6  col-lg-4 col-xl-3">
+                    <div class="card mb-2">
+                        <iframe src="{{ cam.rtsp_link }}" frameborder="0" allowfullscreen></iframe>
+                        <div class="card-body">
+                            <p class="card-text">
+                                {% if cam.entrance == 0 %}
+                                    Наружная, №{{ cam.number }}
+                                {% else %}
+                                Подъезд {{ cam.entrance }}, {{ cam.get_cam_type_display }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col"><h2>Нет доступных камер</h2></div>
+        {% endif %}
+    </div>
+{% endblock %}
