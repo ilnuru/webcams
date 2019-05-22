@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 from pathlib import Path
 
-
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -78,9 +78,9 @@ WSGI_APPLICATION = 'wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': dj_database_url.config()
-# }
+DATABASES = {
+    'default': dj_database_url.config()
+}
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -130,4 +130,42 @@ STATIC_ROOT = os.path.join(str(Path(BASE_DIR).parent), 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(str(Path(BASE_DIR).parent), 'media')
 
-
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    "formatters": {
+        "simple": {
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S"
+        },
+        "verbose": {
+            "format": "%(asctime)s.%(msecs)d - %(levelname)s - %(threadName)s - %(name)s:%(funcName)s:%(lineno)d :: %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S"
+        }
+    },
+    "handlers": {
+        'null': {
+            'level': 'INFO',
+            'class': 'logging.NullHandler',
+            "formatter": "simple",
+        },
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+            "stream": "ext://sys.stderr"
+        }
+    },
+    "loggers": {
+        "django": {
+            "level": "INFO",
+            "handlers": ["console"],
+            "propagate": "yes"
+        },
+        "webcams": {
+            "level": "DEBUG",
+            "handlers": ["console"],
+            "propagate": "yes"
+        }
+    },
+}
